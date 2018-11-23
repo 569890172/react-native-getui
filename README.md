@@ -74,9 +74,14 @@ react-native link
 4、
 [Android Studio 工程配置](https://github.com/GetuiLaboratory/react-native-getui/blob/master/example/document/android.md)
 
-5、在 iOS 工程中如果找不到头文件需要在 TARGETS-> BUILD SETTINGS -> Search Paths -> Header Search Paths 添加如下如路径：
+5、修改iOS 工程中TARGETS-> BUILD SETTINGS -> Search Paths -> Header Search Paths
 
 ````
+
+// 修改
+$(SRCROOT)/../node_modules/react-native-getui/ios/RCTGetuiModule/RCTGetuiModule
+
+// 为
 $(SRCROOT)/../node_modules/react-native-getui/ios/RCTGetuiModule
 ````
 
