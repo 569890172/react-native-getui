@@ -118,7 +118,7 @@ RCT_EXPORT_MODULE();
 }
 
 -(void)noti_registeClientId:(NSNotification *)notification {
-    id obj = [notification object];    
+    id obj = [notification object];
     [self.bridge.eventDispatcher sendAppEventWithName:@"registeClientId"
                                                  body:obj];
 }

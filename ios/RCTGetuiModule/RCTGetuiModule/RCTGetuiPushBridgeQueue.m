@@ -8,7 +8,7 @@
 #import "RCTGetuiPushBridgeQueue.h"
 
 @interface RCTGetuiPushBridgeQueue () {
-  NSMutableArray<NSDictionary *>* _bridgeQueue;
+    NSMutableArray<NSDictionary *>* _bridgeQueue;
 }
 
 @end
@@ -17,13 +17,13 @@
 
 
 + (nonnull instancetype)sharedInstance {
-  static RCTGetuiPushBridgeQueue* sharedInstance = nil;
-  static dispatch_once_t onceToken;
-  dispatch_once(&onceToken, ^{
-    sharedInstance = [self new];
-  });
-  
-  return sharedInstance;
+    static RCTGetuiPushBridgeQueue* sharedInstance = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedInstance = [self new];
+    });
+    
+    return sharedInstance;
 }
 
 
@@ -33,7 +33,7 @@
         self.jsDidLoad = NO;
         _bridgeQueue = [NSMutableArray new];
     }
-
+    
     return self;
 }
 
