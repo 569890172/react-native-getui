@@ -23,10 +23,6 @@ react-native link
 ````
 #### 注意:
 
-- 如果在执行GetuiConfigure 自动安装脚本时发生错误，请使用手动安装方式。
-
-- yourAppId/yourAppKey/yourAppSecret 需要去 [个推官网](https://dev.getui.com) 注册后，在后台配置获取。
-
 - 在 iOS 工程中如果找不到头文件可能要在 TARGETS-> BUILD SETTINGS -> Search Paths -> Header Search Paths 添加如下如路径：
 ````
 $(SRCROOT)/../node_modules/react-native-getui/ios/RCTGetuiModule
