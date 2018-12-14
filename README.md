@@ -71,11 +71,6 @@ react-native link
 5、修改iOS 工程中TARGETS-> BUILD SETTINGS -> Search Paths -> Header Search Paths
 
 ````
-
-// 修改
-$(SRCROOT)/../node_modules/react-native-getui/ios/RCTGetuiModule/RCTGetuiModule
-
-// 为
 $(SRCROOT)/../node_modules/react-native-getui/ios/RCTGetuiModule
 ````
 
