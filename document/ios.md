@@ -161,7 +161,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
 
 #JS 使用及接口
 
-主要的消息通知回调使用如下，其他的接口均可在 [index.js](https://github.com/GetuiLaboratory/react-native-getui/blob/master/index.js) 查看。
+主要的消息通知回调使用如下，其他的接口均可在 [index.js](https://github.com/SunXingZ/react-native-getui/blob/master/index.js) 查看。
 
 ````
 //订阅消息通知
@@ -209,7 +209,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
 
 为保证正确收到 VoIP 推送回调，需要先调用注册 VoIP 接口 `Getui.voipRegistration()`，并且需要打开推送统治权限，并且开启 VoIP 后台运行权限。
 
-![VoIP 权限配置](https://github.com/GetuiLaboratory/react-native-getui/blob/master/example/document/img/ios_1.jpeg?raw=true)
+![VoIP 权限配置](https://github.com/SunXingZ/react-native-getui/blob/master/document/img/ios_1.jpeg?raw=true)
 
 ````
 componentWillUnMount() {

@@ -56,7 +56,7 @@ import com.getui.reactnativegetui.GetuiModule;
 
 #JS 使用
 
-主要的消息通知回调使用如下，其他的接口均可在 [index.js](https://github.com/GetuiLaboratory/react-native-getui/blob/master/index.js) 查看。
+主要的消息通知回调使用如下，其他的接口均可在 [index.js](https://github.com/SunXingZ/react-native-getui/blob/master/index.js) 查看。
 
 ````
 //订阅消息通知
