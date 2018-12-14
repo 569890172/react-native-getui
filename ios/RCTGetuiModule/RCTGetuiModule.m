@@ -58,15 +58,15 @@ RCT_EXPORT_MODULE();
         [defaultCenter removeObserver:self];
         
         [defaultCenter addObserver:self
-                          selector:@selector(noti_receiveRemoteNotification:)
+                          selector:@selector(notificationReceiveRemoteNotification:)
                               name:GT_DID_RECEIVE_REMOTE_NOTIFICATION
                             object:nil];
         [defaultCenter addObserver:self
-                          selector:@selector(noti_openRemoteNotification:)
+                          selector:@selector(notificationOpenRemoteNotification:)
                               name:GT_DID_CLICK_NOTIFICATION
                             object:nil];
         [defaultCenter addObserver:self
-                          selector:@selector(noti_registeClientId:)
+                          selector:@selector(notificationRegisteClientId:)
                               name:GT_DID_REGISTE_CLIENTID
                             object:nil];
         [defaultCenter addObserver:self
@@ -106,10 +106,10 @@ RCT_EXPORT_MODULE();
     return dispatch_get_main_queue();
 }
 
-- (void)noti_receiveRemoteNotification:(NSNotification *)notification {
+- (void)notificationReceiveRemoteNotification:(NSNotification *)notification {
     id obj = [notification object];
     if ([RCTGetuiPushBridgeQueue sharedInstance].jsDidLoad == YES) {
-        [self.bridge.eventDispatcher sendAppEventWithName:@"receiveRemoteNotification"
+        [self.bridge.eventDispatcher sendAppEventWithName:@"GT_RECEIVE_REMOTE_NOTIFICATION"
                                                      body:obj];
     }else{
         [[RCTGetuiPushBridgeQueue sharedInstance] postNotification:notification status:@"receive"];
@@ -117,18 +117,18 @@ RCT_EXPORT_MODULE();
     
 }
 
--(void)noti_registeClientId:(NSNotification *)notification {
+-(void)notificationRegisteClientId:(NSNotification *)notification {
     id obj = [notification object];
-    [self.bridge.eventDispatcher sendAppEventWithName:@"registeClientId"
+    [self.bridge.eventDispatcher sendAppEventWithName:@"GT_REGISTER_CLIENT_ID"
                                                  body:obj];
 }
 
 
-- (void)noti_openRemoteNotification:(NSNotification *)notification {
+- (void)notificationOpenRemoteNotification:(NSNotification *)notification {
     id obj = [notification object];
     // 如果js部分未加载完，则先存档
     if ([RCTGetuiPushBridgeQueue sharedInstance].jsDidLoad == YES) {
-        [self.bridge.eventDispatcher sendAppEventWithName:@"clickRemoteNotification"
+        [self.bridge.eventDispatcher sendAppEventWithName:@"GT_CLICK_REMOTE_NOTIFICATION"
                                                      body:obj];
     } else {
         [[RCTGetuiPushBridgeQueue sharedInstance] postNotification:notification status:@"open"];
@@ -337,7 +337,6 @@ RCT_EXPORT_METHOD(sendFeedbackMessage:(NSInteger)actionId andTaskId:(NSString *)
 - (void)pushRegistry:(PKPushRegistry *)registry didUpdatePushCredentials:(PKPushCredentials *)credentials forType:(NSString *)type {
     NSString *voiptoken = [credentials.token.description stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
     voiptoken = [voiptoken stringByReplacingOccurrencesOfString:@" " withString:@""];
-    NSLog(@"\n>>>[VoIP Token]:%@\n\n",voiptoken);
     //向个推服务器注册 VoipToken
     [GeTuiSdk registerVoipToken:voiptoken];
 }
@@ -347,15 +346,12 @@ RCT_EXPORT_METHOD(sendFeedbackMessage:(NSInteger)actionId andTaskId:(NSString *)
     //个推VOIP回执统计
     [GeTuiSdk handleVoipNotification:payload.dictionaryPayload];
     
-    //TODO:接受 VoIP 推送中的 payload 内容进行具体业务逻辑处理
-    NSLog(@"[VoIP Payload]:%@,%@", payload, payload.dictionaryPayload);
-    
     NSDictionary *ret = [NSDictionary dictionaryWithObjectsAndKeys:
                          [NSNumber numberWithInteger:1], @"result",
                          @"voipPayload", @"type",
                          payload.dictionaryPayload[@"payload"], @"payload",
                          payload.dictionaryPayload[@"_gmid_"], @"gmid",  nil];
-    [self.bridge.eventDispatcher sendAppEventWithName:@"voipPushPayload"
+    [self.bridge.eventDispatcher sendAppEventWithName:@"GT_VOIP_PUSH_PAYLOAD"
                                                  body:ret];
 }
 

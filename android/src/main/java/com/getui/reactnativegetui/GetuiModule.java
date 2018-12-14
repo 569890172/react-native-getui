@@ -24,13 +24,12 @@ public class GetuiModule extends ReactContextBaseJavaModule {
 
     private static final String TAG = "GetuiModule";
 
-    public static final String EVENT_RECEIVE_REMOTE_NOTIFICATION = "receiveRemoteNotification";
-
-    public static final String EVENT_TYPE_RECEIVE_CID = "cid";
-    public static final String EVENT_TYPE_PAYLOAD = "payload";
-    public static final String EVENT_TYPE_CMD = "cmd";
-    public static final String EVENT_TYPE_NOTIFICATION_ARRIVED = "notificationArrived";
-    public static final String EVENT_TYPE_NOTIFICATION_CLICKED = "notificationClicked";
+    public static final String EVENT_RECEIVE_REMOTE_NOTIFICATION = "GT_RECEIVE_REMOTE_NOTIFICATION";
+    public static final String EVENT_TYPE_RECEIVE_CID = "GT_CLIENT_ID";
+    public static final String EVENT_TYPE_PAYLOAD = "GT_PAYLOAD";
+    public static final String EVENT_TYPE_CMD = "GT_CMD";
+    public static final String EVENT_TYPE_NOTIFICATION_ARRIVED = "GT_NOTIFICATION_ARRIVED";
+    public static final String EVENT_TYPE_NOTIFICATION_CLICKED = "GT_NOTIFICATION_CLICKED";
 
     private static ReactApplicationContext mRAC;
 
@@ -70,7 +69,6 @@ public class GetuiModule extends ReactContextBaseJavaModule {
      */
     public static void initPush(Context context){
         mContext = context;
-        GetuiLogger.log("initPush, mContext = " + mContext);
         PushManager.getInstance().initialize(mContext, PushService.class);
         PushManager.getInstance().registerPushIntentService(mContext, PushIntentService.class);
     }
@@ -107,7 +105,6 @@ public class GetuiModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void clientId(Callback callback){
         String clientId = PushManager.getInstance().getClientid(mContext);
-        GetuiLogger.log("clientId = " + clientId);
         callback.invoke(clientId);
     }
 
@@ -119,7 +116,6 @@ public class GetuiModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void status(Callback callback){
         boolean isPushTurnOn = PushManager.getInstance().isPushTurnedOn(mContext);
-        GetuiLogger.log("isPushTurnOn = " + isPushTurnOn);
         callback.invoke(isPushTurnOn ? "1" : "2" );
     }
 
@@ -131,7 +127,6 @@ public class GetuiModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void version(Callback callback){
         String version = PushManager.getInstance().getVersion(mContext);
-        GetuiLogger.log("version = " + version);
         callback.invoke(version);
     }
 

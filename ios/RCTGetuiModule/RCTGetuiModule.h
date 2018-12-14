@@ -24,6 +24,5 @@
 #define GT_DID_CLICK_NOTIFICATION  @"CCPDidOpenApnsNotification"
 #define GT_DID_REGISTE_CLIENTID @"GtDidRegisteClient"
 
-
 @interface RCTGetuiModule : NSObject <RCTBridgeModule>
 @end

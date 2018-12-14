@@ -61,26 +61,26 @@ import com.getui.reactnativegetui.GetuiModule;
 ````
 //订阅消息通知
    var { NativeAppEventEmitter } = require('react-native');
-   var receiveRemoteNotificationSub = NativeAppEventEmitter.addListener(
-      'receiveRemoteNotification',
+   var GT_RECEIVE_REMOTE_NOTIFICATION = NativeAppEventEmitter.addListener(
+      'GT_RECEIVE_REMOTE_NOTIFICATION',
       (notification) => {
         //消息类型分为 cmd 和 payload 透传消息，具体的消息体格式会有差异
         switch (notification.type) {
-            case "cid":
-                Alert.alert('初始化获取到cid',JSON.stringify(notification))
+            case "GT_CLIENT_ID":
+                Alert.alert('GT_CLIENT_ID',JSON.stringify(notification))
                 break;
-            case "cmd":
-                Alert.alert('cmd 消息通知',JSON.stringify(notification))
+            case "GT_CMD":
+                Alert.alert('GT_CMD消息通知',JSON.stringify(notification))
                 break;
-            case "payload":
-                Alert.alert('payload 消息通知',JSON.stringify(notification))
+            case "GT_PAYLOAD":
+                Alert.alert('GT_PAYLOAD消息通知',JSON.stringify(notification))
                 break;
             //新增回调通知到达，点击回调
-            case 'notificationArrived':
-                Alert.alert('notificationArrived 通知到达',JSON.stringify(notification))
+            case 'GT_NOTIFICATION_ARRIVED':
+                Alert.alert('GT_NOTIFICATION_ARRIVED通知到达',JSON.stringify(notification))
                 break
-            case 'notificationClicked':
-                Alert.alert('notificationArrived 通知点击',JSON.stringify(notification))
+            case 'GT_NOTIFICATION_CLICKED':
+                Alert.alert('GT_NOTIFICATION_CLICKED通知点击',JSON.stringify(notification))
                 break
             default:
         }
@@ -93,7 +93,7 @@ import com.getui.reactnativegetui.GetuiModule;
 ````
 componentWillUnMount() {
   //记得在此处移除监听
-    receiveRemoteNotificationSub.remove()
+    GT_RECEIVE_REMOTE_NOTIFICATION.remove()
 }
 
 ````

@@ -10,44 +10,16 @@ const GetuiModule = NativeModules.GetuiModule;
  * @param  {string} message
  */
 const log = (message) => {
-		console.log(`[Getui] ${message}`);
+	console.log(`[Getui] ${message}`);
 }
 
 export default class Getui {
-	//监听消息通知
-			// var { NativeAppEventEmitter } = require('react-native');
-			// var receiveRemoteNotificationSub = NativeAppEventEmitter.addListener(
-			// 	 'receiveRemoteNotification',
-			// 	 (notification) => {
-			// 		 //消息类型分为 APNs 和 payload 透传消息，具体的消息体格式会有差异
-			// 		 switch (notification.type) {
-			// 				 case "apns":
-			// 						 Alert.alert('APNs 消息通知',JSON.stringify(notification))
-			// 						 break;
-			// 				 case "payload":
-			// 						 Alert.alert('payload 消息通知',JSON.stringify(notification))
-			// 						 break;
-			// 				 default:
-			// 		 }
-			// 	 }
-			//  );
-			//
-			//  var clickRemoteNotificationSub = NativeAppEventEmitter.addListener(
-			// 		 'clickRemoteNotification',
-			// 		 (notification) => {
-			// 				 Alert.alert('点击通知',JSON.stringify(notification))
-			// 		 }
-			//  );
-			//
-			// //记得在 componentWillUnMount 移除监听
-	    //     receiveRemoteNotificationSub.remove()
-	    //     clickRemoteNotificationSub.remove()
 
-    /**
-	 * 初始化推送服务
-     */
-    static initPush(){
-    	GetuiModule.initPush();
+	/**
+ * 初始化推送服务
+	 */
+	static initPush() {
+		GetuiModule.initPush();
 	}
 	/**
 	 *  销毁SDK，并且释放资源
@@ -67,7 +39,7 @@ export default class Getui {
 	 *  @return Cid值
 	 */
 	static clientId(cb) {
-		GetuiModule.clientId((param)=>{
+		GetuiModule.clientId((param) => {
 			cb(param)
 		});
 	}
@@ -77,7 +49,7 @@ export default class Getui {
 	 *  @return 运行状态
 	 */
 	static status(cb) {
-		GetuiModule.status((param)=>{
+		GetuiModule.status((param) => {
 			cb(param)
 		});
 	}
@@ -87,7 +59,7 @@ export default class Getui {
 	 *  @return 版本值
 	 */
 	static version(cb) {
-		GetuiModule.version((param)=>{
+		GetuiModule.version((param) => {
 			cb(param)
 		});
 	}
@@ -101,13 +73,13 @@ export default class Getui {
 	static runBackgroundEnable(isEnable) {
 		GetuiModule.runBackgroundEnable(isEnable);
 	}
-/**
- *  地理围栏功能，设置地理围栏是否运行
- *  备注：SDK可以未启动就调用该方法
- *
- *  @param isEnable 设置地理围栏功能是否运行（默认值：NO）
- *  @param isVerify 设置是否SDK主动弹出用户定位请求（默认值：NO）
- */
+	/**
+	 *  地理围栏功能，设置地理围栏是否运行
+	 *  备注：SDK可以未启动就调用该方法
+	 *
+	 *  @param isEnable 设置地理围栏功能是否运行（默认值：NO）
+	 *  @param isVerify 设置是否SDK主动弹出用户定位请求（默认值：NO）
+	 */
 	static lbsLocationEnable(isEnable, isVerify) {
 		GetuiModule.lbsLocationEnable(isEnable, isVerify);
 	}
@@ -174,14 +146,14 @@ export default class Getui {
 		GetuiModule.setPushModeForOff(isValue);
 	}
 
-	 /**
- 	 *  同步角标值到个推服务器
- 	 *  该方法只是同步角标值到个推服务器，本地仍须调用setApplicationIconBadgeNumber函数
- 	 *
- 	 *  SDK-1.4.0+
- 	 *
- 	 *  @param value 角标数值
- 	 */
+	/**
+		*  同步角标值到个推服务器
+		*  该方法只是同步角标值到个推服务器，本地仍须调用setApplicationIconBadgeNumber函数
+		*
+		*  SDK-1.4.0+
+		*
+		*  @param value 角标数值
+		*/
 	static setBadge(value) {
 		GetuiModule.setBadge(value);
 	}
@@ -211,7 +183,7 @@ export default class Getui {
 	 *  该方法需要在回调方法“GeTuiSdkDidReceivePayload:andTaskId:andMessageId:andOffLine:fromApplication:”使用
 	 */
 	static sendFeedbackMessage(actionId, taskId, msgId, cb) {
-		GetuiModule.sendFeedbackMessage(actionId, taskId, msgId, (param)=>{
+		GetuiModule.sendFeedbackMessage(actionId, taskId, msgId, (param) => {
 			cb(param)
 		});
 	}
@@ -225,25 +197,5 @@ export default class Getui {
 	static voipRegistration() {
 		GetuiModule.voipRegistration();
 	}
-
-	/*****************  deprecated ******************/
-	/*
-	*  React-native 只能 callback 一次，因此移除该形式，改用订阅模式监听消息
-	 *  收到消息通知的回调
-	 */
-	// static receiveRemoteNotification(cb){
-	// 	GetuiModule.receiveRemoteNotification((param)=>{
-	// 		cb(param)
-	// 	})
-	// }
-	/**
-	*  React-native 只能 callback 一次，因此移除该形式，改用订阅模式监听消息
-	 *  点击通知的回调，iOS10 以后才有该方法
-	 */
-	// static clickRemoteNotification(cb){
-	// 	GetuiModule.clickRemoteNotification((param)=>{
-	// 		cb(param)
-	// 	})
-	// }
 
 }

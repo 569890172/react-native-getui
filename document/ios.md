@@ -97,7 +97,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     // [ GTSdk ]：将收到的APNs信息传给个推统计
     [GeTuiSdk handleRemoteNotification:userInfo];
 
-  	[[NSNotificationCenter defaultCenter]postNotificationName:GT_DID_RECEIVE_REMOTE_NOTIFICATION object:@{@"type":@"apns",@"userInfo":userInfo}];
+  	[[NSNotificationCenter defaultCenter]postNotificationName:GT_DID_RECEIVE_REMOTE_NOTIFICATION object:@{@"type":@"GT_APNS",@"userInfo":userInfo}];
 
     completionHandler(UIBackgroundFetchResultNewData);
 }
@@ -107,7 +107,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
 //  iOS 10: App在前台获取到通知
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler {
-  	[[NSNotificationCenter defaultCenter]postNotificationName:GT_DID_RECEIVE_REMOTE_NOTIFICATION object:@{@"type":@"apns",@"userInfo":notification.request.content.userInfo}];
+  	[[NSNotificationCenter defaultCenter]postNotificationName:GT_DID_RECEIVE_REMOTE_NOTIFICATION object:@{@"type":@"GT_APNS",@"userInfo":notification.request.content.userInfo}];
     completionHandler(UNNotificationPresentationOptionBadge | UNNotificationPresentationOptionSound | UNNotificationPresentationOptionAlert);
 }
 
@@ -145,7 +145,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     }
     NSString *msg = [NSString stringWithFormat:@"taskId=%@,messageId:%@,payloadMsg:%@%@", taskId, msgId, payloadMsg, offLine ? @"<离线消息>" : @""];
     NSDictionary *userInfo = @{@"taskId":taskId,@"msgId":msgId,@"payloadMsg":payloadMsg,@"offLine":offLine?@"YES":@"NO"};
-    [[NSNotificationCenter defaultCenter]postNotificationName:GT_DID_RECEIVE_REMOTE_NOTIFICATION object:@{@"type":@"payload",@"userInfo":userInfo}];
+    [[NSNotificationCenter defaultCenter]postNotificationName:GT_DID_RECEIVE_REMOTE_NOTIFICATION object:@{@"type":@"GT_PAYLOAD",@"userInfo":userInfo}];
 }
 
 /** SDK收到sendMessage消息回调 */
@@ -166,42 +166,42 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
 ````
 //订阅消息通知
    var { NativeAppEventEmitter } = require('react-native');
-   var resigsteClientIdSub = NativeAppEventEmitter.addListener(
-         'registeClientId',
+   var GT_REGISTER_CLIENT_ID = NativeAppEventEmitter.addListener(
+         'GT_REGISTER_CLIENT_ID',
          (clientId) => {
-           Alert.alert(clientId);
+           Alert.alert('GT_REGISTER_CLIENT_ID', clientId);
          }
        )
-   var receiveRemoteNotificationSub = NativeAppEventEmitter.addListener(
-      'receiveRemoteNotification',
+   var GT_RECEIVE_REMOTE_NOTIFICATION = NativeAppEventEmitter.addListener(
+      'GT_RECEIVE_REMOTE_NOTIFICATION',
       (notification) => {
-        //消息类型分为 APNs 和 payload 透传消息，具体的消息体格式会有差异
+        //消息类型分为 GT_APNS 和 GT_PAYLOAD 透传消息，具体的消息体格式会有差异
         switch (notification.type) {
-            case "apns":
-                Alert.alert('APNs 消息通知',JSON.stringify(notification))
+            case "GT_APNS":
+                Alert.alert('GT_APNS 消息通知',JSON.stringify(notification))
                 break;
-            case "payload":
-                Alert.alert('payload 消息通知',JSON.stringify(notification))
+            case "GT_PAYLOAD":
+                Alert.alert('GT_PAYLOAD 消息通知',JSON.stringify(notification))
                 break;
             default:
         }
       }
     );
 
-    var clickRemoteNotificationSub = NativeAppEventEmitter.addListener(
-        'clickRemoteNotification',
+    var GT_CLICK_REMOTE_NOTIFICATION = NativeAppEventEmitter.addListener(
+        'GT_CLICK_REMOTE_NOTIFICATION',
         (notification) => {
-            Alert.alert('点击通知',JSON.stringify(notification))
+            Alert.alert('GT_CLICK_REMOTE_NOTIFICATION',JSON.stringify(notification))
         }
     );
 
     <!-- VoIP 推送通知回调 -->
 
-    var voipPushPayloadSub = 
+    var GT_VOIP_PUSH_PAYLOAD = 
         NativeAppEventEmitter.addListener(
-            'voipPushPayload',
+            'GT_VOIP_PUSH_PAYLOAD',
             (notification) => {
-                Alert.alert('VoIP 通知： ',JSON.stringify(notification))
+                Alert.alert('GT_VOIP_PUSH_PAYLOAD ',JSON.stringify(notification))
             }
         );
 ````
@@ -214,10 +214,10 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
 ````
 componentWillUnMount() {
   //记得在此处移除监听
-    receiveRemoteNotificationSub.remove()
-    clickRemoteNotificationSub.remove()
-    resigsteClientIdSub.remove()
-    voipPushPayloadSub.remove()
+    GT_RECEIVE_REMOTE_NOTIFICATION.remove()
+    GT_CLICK_REMOTE_NOTIFICATION.remove()
+    GT_REGISTER_CLIENT_ID.remove()
+    GT_VOIP_PUSH_PAYLOAD.remove()
 }
 ````
 
