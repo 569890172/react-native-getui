@@ -17,15 +17,9 @@ react-native-getui 是个推官方开发的 React Native 插件，使用该插�
 ````
 npm install react-native-getui -save
 ````
+
 ````
 react-native link
-````
-````
-npm run GetuiConfigure <yourAppId> <yourAppKey> <yourAppSecret>  <yourModuleName>
-// yourModuleName 指的是你的 Android 项目中的模块名称（对 iOS 没有影响，不填写的话默认值为 app）
-// 举个列子：
-npm run GetuiConfigure DI1jwW3FtZ6kGDeY5dk0Y9 DQCk2V8Jev9hqhWDU94PF9 Rtyp5trKUt8HSyzD8zRXX7 app
-
 ````
 #### 注意:
 
@@ -130,11 +124,4 @@ var clickRemoteNotificationSub = NativeAppEventEmitter.addListener(
     }
 );
 ````
-
-# 示例
-
-* 我们提供了一个demo供开发者参考对照 [demo](https://github.com/GetuiLaboratory/react-native-getui/tree/master/example/pushDemo)
-
-
-* 新版本插件[new demo](https://github.com/GetuiLaboratory/react-native-getui/tree/master/example/pushDemo_new)
 
