@@ -142,9 +142,7 @@ public class GetuiModule extends ReactContextBaseJavaModule {
      * @param isEnable
      */
     @ReactMethod
-    public void runBackgroundEnable(boolean isEnable){
-        // Empty
-    }
+    public void runBackgroundEnable(boolean isEnable){}
 
 
     /**
@@ -156,9 +154,7 @@ public class GetuiModule extends ReactContextBaseJavaModule {
      * @param isVerify 设置是否SDK主动弹出用户定位请求（默认值：NO）
      */
     @ReactMethod
-    public void lbsLocationEnable(boolean isEnable, boolean isVerify){
-        // Empty
-    }
+    public void lbsLocationEnable(boolean isEnable, boolean isVerify){}
 
 
     /**
@@ -167,9 +163,7 @@ public class GetuiModule extends ReactContextBaseJavaModule {
      *  @param channelId 渠道值，可以为空值
      */
     @ReactMethod
-    public void setChannelId(String channelId){
-        // Empty
-    }
+    public void setChannelId(String channelId){}
 
 
     /**
@@ -178,10 +172,7 @@ public class GetuiModule extends ReactContextBaseJavaModule {
      * @param deviceToken
      */
     @ReactMethod
-    public void registerDeviceToken(String deviceToken){
-        // Empty
-
-    }
+    public void registerDeviceToken(String deviceToken){}
 
     /**
      * 绑定别名功能:后台可以根据别名进行推送
@@ -233,9 +224,7 @@ public class GetuiModule extends ReactContextBaseJavaModule {
      * @param isValue
      */
     @ReactMethod
-    public void setPushModeForOff(boolean isValue){
-        // Empty
-    }
+    public void setPushModeForOff(boolean isValue){}
 
     /**
      * 同步角标值到个推服务器
@@ -243,9 +232,7 @@ public class GetuiModule extends ReactContextBaseJavaModule {
      * @param value
      */
     @ReactMethod
-    public void setBadge(int value){
-        // Empty
-    }
+    public void setBadge(int value){}
 
     /**
      * 重置角标值到个推服务器
@@ -253,9 +240,7 @@ public class GetuiModule extends ReactContextBaseJavaModule {
      * @param badge
      */
     @ReactMethod
-    public void resetBadge(int badge){
-        //Empty
-    }
+    public void resetBadge(int badge){}
 
 
     /**
@@ -266,10 +251,7 @@ public class GetuiModule extends ReactContextBaseJavaModule {
      *
      */
     @ReactMethod
-    public void sendMessage(String body, String error){
-        // Empty
-
-    }
+    public void sendMessage(String body, String error){}
 
     /**
      *  上行第三方自定义回执actionid

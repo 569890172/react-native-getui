@@ -137,18 +137,6 @@ RCT_EXPORT_MODULE();
 
 #pragma mark - 收到通知回调
 
-//RCT_EXPORT_METHOD(receiveRemoteNotification:(RCTResponseSenderBlock)callback)
-//{
-//    receiveRemoteNotificationCallback = callback;
-//}
-///*
-// *点击回调传回的消息格式只为 APNs
-// */
-//RCT_EXPORT_METHOD(clickRemoteNotification:(RCTResponseSenderBlock)callback)
-//{
-//    clickNotificationCallback = callback;
-//}
-
 /**
  *  销毁SDK，并且释放资源
  */

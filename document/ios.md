@@ -82,10 +82,6 @@ Xcode 工程中需要注册个推 SDK 、注册 deviceToken 、监听消息回�
 - (void)application:(UIApplication *)application
 didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
   NSString *token = [[deviceToken description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
-    token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
-    NSLog(@"\n>>>[DeviceToken Success]:%@\n\n", token);
-
-    // [ GTSdk ]：向个推服务器注册deviceToken
     [GeTuiSdk registerDeviceToken:token];
 }
 ````
@@ -101,9 +97,6 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     // [ GTSdk ]：将收到的APNs信息传给个推统计
     [GeTuiSdk handleRemoteNotification:userInfo];
 
-    // 控制台打印接收APNs信息
-    NSLog(@"\n>>>[Receive RemoteNotification]:%@\n\n", userInfo);
-
   	[[NSNotificationCenter defaultCenter]postNotificationName:GT_DID_RECEIVE_REMOTE_NOTIFICATION object:@{@"type":@"apns",@"userInfo":userInfo}];
 
     completionHandler(UIBackgroundFetchResultNewData);
@@ -114,23 +107,14 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
 //  iOS 10: App在前台获取到通知
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler {
-
-    NSLog(@"willPresentNotification：%@", notification.request.content.userInfo);
   	[[NSNotificationCenter defaultCenter]postNotificationName:GT_DID_RECEIVE_REMOTE_NOTIFICATION object:@{@"type":@"apns",@"userInfo":notification.request.content.userInfo}];
-
-    // 根据APP需要，判断是否要提示用户Badge、Sound、Alert
     completionHandler(UNNotificationPresentationOptionBadge | UNNotificationPresentationOptionSound | UNNotificationPresentationOptionAlert);
 }
 
 //  iOS 10: 点击通知进入App时触发
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler {
-
-    NSLog(@"didReceiveNotification：%@", response.notification.request.content.userInfo);
-
-    // [ GTSdk ]：将收到的APNs信息传给个推统计
     [GeTuiSdk handleRemoteNotification:response.notification.request.content.userInfo];
   	[[NSNotificationCenter defaultCenter]postNotificationName:GT_DID_CLICK_NOTIFICATION object:response.notification.request.content.userInfo];
-
     completionHandler();
 }
 #endif
@@ -144,58 +128,34 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
 
 /** SDK启动成功返回cid */
 - (void)GeTuiSdkDidRegisterClient:(NSString *)clientId {
-    // [4-EXT-1]: 个推SDK已注册，返回clientId
     [[NSNotificationCenter defaultCenter]postNotificationName:GT_DID_REGISTE_CLIENTID object:clientId];
-    NSLog(@"\n>>[GTSdk RegisterClient]:%@\n\n", clientId);
 }
 
 /** SDK遇到错误回调 */
-- (void)GeTuiSdkDidOccurError:(NSError *)error {
-    // [EXT]:个推错误报告，集成步骤发生的任何错误都在这里通知，如果集成后，无法正常收到消息，查看这里的通知。
-    NSLog(@"\n>>[GTSdk error]:%@\n\n", [error localizedDescription]);
-}
+- (void)GeTuiSdkDidOccurError:(NSError *)error {}
 
 
 /** SDK收到透传消息回调 */
 - (void)GeTuiSdkDidReceivePayloadData:(NSData *)payloadData andTaskId:(NSString *)taskId andMsgId:(NSString *)msgId andOffLine:(BOOL)offLine fromGtAppId:(NSString *)appId {
-    // [ GTSdk ]：汇报个推自定义事件(反馈透传消息)
     [GeTuiSdk sendFeedbackMessage:90001 andTaskId:taskId andMsgId:msgId];
-
     // 数据转换
     NSString *payloadMsg = nil;
     if (payloadData) {
         payloadMsg = [[NSString alloc] initWithBytes:payloadData.bytes length:payloadData.length encoding:NSUTF8StringEncoding];
     }
-
-    // 控制台打印日志
     NSString *msg = [NSString stringWithFormat:@"taskId=%@,messageId:%@,payloadMsg:%@%@", taskId, msgId, payloadMsg, offLine ? @"<离线消息>" : @""];
-    NSLog(@"\n>>[GTSdk ReceivePayload]:%@\n\n", msg);
     NSDictionary *userInfo = @{@"taskId":taskId,@"msgId":msgId,@"payloadMsg":payloadMsg,@"offLine":offLine?@"YES":@"NO"};
     [[NSNotificationCenter defaultCenter]postNotificationName:GT_DID_RECEIVE_REMOTE_NOTIFICATION object:@{@"type":@"payload",@"userInfo":userInfo}];
 }
 
 /** SDK收到sendMessage消息回调 */
-- (void)GeTuiSdkDidSendMessage:(NSString *)messageId result:(int)result {
-    // 发送上行消息结果反馈
-    NSString *msg = [NSString stringWithFormat:@"sendmessage=%@,result=%d", messageId, result];
-    NSLog(@"\n>>[GTSdk DidSendMessage]:%@\n\n", msg);
-}
+- (void)GeTuiSdkDidSendMessage:(NSString *)messageId result:(int)result {}
 
 /** SDK运行状态通知 */
-- (void)GeTuiSDkDidNotifySdkState:(SdkStatus)aStatus {
-    // 通知SDK运行状态
-    NSLog(@"\n>>[GTSdk SdkState]:%u\n\n", aStatus);
-}
+- (void)GeTuiSDkDidNotifySdkState:(SdkStatus)aStatus {}
 
 /** SDK设置推送模式回调 */
-- (void)GeTuiSdkDidSetPushMode:(BOOL)isModeOff error:(NSError *)error {
-    if (error) {
-        NSLog(@"\n>>[GTSdk SetModeOff Error]:%@\n\n", [error localizedDescription]);
-        return;
-    }
-
-    NSLog(@"\n>>[GTSdk SetModeOff]:%@\n\n", isModeOff ? @"开启" : @"关闭");
-}
+- (void)GeTuiSdkDidSetPushMode:(BOOL)isModeOff error:(NSError *)error {}
 
 ````
 

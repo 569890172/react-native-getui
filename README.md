@@ -59,10 +59,10 @@ react-native link
 ````
 
 3、
-[Xcode 工程配置](https://github.com/GetuiLaboratory/react-native-getui/blob/master/example/document/iOS.md)
+[Xcode 工程配置](https://github.com/GetuiLaboratory/react-native-getui/blob/master/document/ios.md)
 
 4、
-[Android Studio 工程配置](https://github.com/GetuiLaboratory/react-native-getui/blob/master/example/document/android.md)
+[Android Studio 工程配置](https://github.com/GetuiLaboratory/react-native-getui/blob/master/document/android.md)
 
 5、修改iOS 工程中TARGETS-> BUILD SETTINGS -> Search Paths -> Header Search Paths
 
