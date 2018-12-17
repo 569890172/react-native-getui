@@ -25,7 +25,7 @@ react-native link
 
 - 在 iOS 工程中如果找不到头文件可能要在 TARGETS-> BUILD SETTINGS -> Search Paths -> Header Search Paths 添加如下如路径：
 ````
-$(SRCROOT)/../node_modules/react-native-getui/ios/RCTGetuiModule
+$(SRCROOT)/../node_modules/react-native-getui/ios/
 ````
 - 您的工程目录/android/app/src/main/{您的包名}/MainActivity的onCreate中调用
 ````
@@ -67,6 +67,6 @@ react-native link
 5、修改iOS 工程中TARGETS-> BUILD SETTINGS -> Search Paths -> Header Search Paths
 
 ````
-$(SRCROOT)/../node_modules/react-native-getui/ios/RCTGetuiModule
+$(SRCROOT)/../node_modules/react-native-getui/ios/
 ````
 
