@@ -1,72 +1,164 @@
-# react-native-getui （请使用版本@1.1.25）
-react-native-getui 是个推官方开发的 React Native 插件，使用该插件可以方便快速地集成推送功能。
+Build Setup for Andorid
 
+1、android/settings.gradle
 
-# 环境
+```
+include ':react-native-getui'
+project(':react-native-getui').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-getui/android')
+```
 
-- React Native Version ： 0.42(demo中使用的rn版本)，理论上可以任意使用其他任何RN版本
-- react-native-getui >= 1.1.23
-- taobao的源和npm源版本可能存在不一致
+2、android/app/proguard-rules.pro
 
-# 安装
+```
+-dontwarn com.igexin.**
+-keep class com.igexin.**{*;}
+-keep class org.json.** { *; }
 
-### 使用 npm 自动安装
+-keep class android.support.v4.app.NotificationCompat { *; }
+-keep class android.support.v4.app.NotificationCompat$Builder { *; }
+```
 
-在您的项目根目录下执行
+3、android/app/build.gradle中的defaultConfig
 
-````
-npm install react-native-getui -save
-````
+```
+ndk {
+    abiFilters "armeabi", "armeabi-v7a", "x86_64"
+}
+manifestPlaceholders = [
+    GETUI_APP_ID : "",
+    GETUI_APP_KEY : "",
+    GETUI_APP_SECRET : ""
+]
+```
 
-````
-react-native link
-````
-#### 注意:
+4、android/app/build.gradle中的dependencies
 
-- 在 iOS 工程中如果找不到头文件可能要在 TARGETS-> BUILD SETTINGS -> Search Paths -> Header Search Paths 添加如下如路径：
-````
-$(SRCROOT)/../node_modules/react-native-getui/ios/
-````
-- 您的工程目录/android/app/src/main/{您的包名}/MainActivity的onCreate中调用
-````
-GetuiModule.initPush(this);
-````
-#### 注意：
+```
+compile project(':react-native-getui')
+```
 
-- 有可能您的MainActivity中未重写onCreate方法，如果未重写，请重写onCreate方法，方法如下：
-````
-protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        GetuiModule.initPush(this);
-    }
-````
-如果您使用Android Studio作为IDE，Android Studio会自动为您import 相应的类名，如果您使用其他的IDE，请import相关的类
+5、android/app/src/main/AndroidManifest.xml
 
-````
-import android.os.Bundle;
+```
+    <!-- 个推SDK权限配置开始 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <!-- 支持iBeancon 需要蓝牙权限 -->
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <!-- 支持个推3.0 电子围栏功能 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- 浮动通知权限 -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <!-- 自定义权限 -->
+    <uses-permission android:name="getui.permission.GetuiService.${applicationId}" />
+    <permission
+        android:name="getui.permission.GetuiService.${applicationId}"
+        android:protectionLevel="normal" >
+    </permission>
+    <!-- 个推SDK权限配置结束 -->
+
+    // 以下内容加在application节点下
+    <!-- 个推SDK配置开始 -->
+        <!-- 配置的第三方参数属性 -->
+        <meta-data
+            android:name="PUSH_APPID"
+            android:value="${GETUI_APP_ID}" />
+        <meta-data
+            android:name="PUSH_APPKEY"
+            android:value="${GETUI_APP_KEY}" />
+        <meta-data
+            android:name="PUSH_APPSECRET"
+            android:value="${GETUI_APP_SECRET}" />
+
+        <!-- 配置SDK核心服务 -->
+        <service
+            android:name="com.igexin.sdk.PushService"
+            android:exported="true"
+            android:label="NotificationCenter"
+            android:process=":pushservice">
+            <intent-filter>
+                <action android:name="com.igexin.sdk.action.service.message"/>
+            </intent-filter>
+        </service>
+
+        <receiver android:name="com.igexin.sdk.PushReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.intent.action.USER_PRESENT" />
+                <action android:name="com.igexin.sdk.action.refreshls" />
+                <!-- 以下三项为可选的action声明，可大大提高service存活率和消息到达速度 -->
+                <action android:name="android.intent.action.MEDIA_MOUNTED" />
+                <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
+                <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name="com.igexin.sdk.PushActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:process=":pushservice"
+            android:taskAffinity="com.igexin.sdk.PushActivityTask"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+        </activity>
+
+        <activity
+        android:name="com.igexin.sdk.GActivity"
+        android:excludeFromRecents="true"
+        android:exported="true"
+        android:process=":pushservice"
+        android:taskAffinity="com.igexin.sdk.PushActivityTask"
+        android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+
+        <!-- 个推SDK配置结束 -->
+
+        <service
+            android:name="com.getui.reactnativegetui.PushService"
+            android:exported="true"
+            android:label="PushService"
+            android:process=":pushservice"/>
+
+        <service android:name="com.getui.reactnativegetui.PushIntentService"/>
+
+        // 在application标签中添加
+        <application android:usesCleartextTraffic="true">
+```
+
+6、将react-native-getui/example/pushDemoWithFramework/android/app/src/main/jniLibs目录复制到你的项目android相同目录下。
+
+7、在android/app/src/main/java/com/你的项目/MainActivity.java中添加以下代码
+
+```
 import com.getui.reactnativegetui.GetuiModule;
-````
 
-### 手动安装
-1、
-````
-npm install react-native-getui -save
-````
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    GetuiModule.initPush(this);
+}
+```
 
-2、
-````
-react-native link
-````
+8、在android/app/src/main/java/com/你的项目/MainApplication.java中添加以下代码
 
-3、
-[Xcode 工程配置](https://github.com/SunXingZ/react-native-getui/blob/master/document/ios.md)
+```
+import com.getui.reactnativegetui.GetuiPackage;
 
-4、
-[Android Studio 工程配置](https://github.com/SunXingZ/react-native-getui/blob/master/document/android.md)
+@Override
+protected List<ReactPackage> getPackages() {
+    return Arrays.<ReactPackage>asList(
+        new MainReactPackage(),
+        new GetuiPackage()
+    );
+}
+```
 
-5、修改iOS 工程中TARGETS-> BUILD SETTINGS -> Search Paths -> Header Search Paths
-
-````
-$(SRCROOT)/../node_modules/react-native-getui/ios/
-````
-
+9、将react-native-getui/example/pushDemoWithFramework/android/app/src/main/res/layout目录复制到你的android相同目录下。
