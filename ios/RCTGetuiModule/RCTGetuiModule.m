@@ -290,11 +290,13 @@ RCT_EXPORT_METHOD(setPushModeForOff:(BOOL)isValue)
 
 RCT_EXPORT_METHOD(setBadge:(NSUInteger)value)
 {
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:value];
     [GeTuiSdk setBadge:value];
 }
 
 RCT_EXPORT_METHOD(resetBadge)
 {
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     [GeTuiSdk resetBadge];
 }
 
